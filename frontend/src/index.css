@@ -1,0 +1,18 @@
+/* Tailwind classes will style your components */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for transitions, etc. */
+.hover\:bg-blue-600:hover {
+  background-color: #3b82f6;
+}
+
+.dashed-box:hover {
+  border-color: #3b82f6;
+  background-color: #e0f2fe;
+}
+
+.shadow-lg {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}

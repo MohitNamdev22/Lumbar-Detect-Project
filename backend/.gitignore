@@ -1,0 +1,55 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+env/
+ENV/
+venv/
+env.bak/
+
+# Environment variables
+.env
+.env.*  # If you have multiple environment files like .env.dev or .env.prod
+
+# Installed packages
+*.egg-info/
+dist/
+build/
+
+# Logs
+*.log
+logs/
+*.out
+
+# IDE specific files
+.vscode/
+.idea/
+*.sw?
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Python-related
+pip-log.txt
+pip-delete-this-directory.txt
+*.pyc
+.pytest_cache/
+.coverage
+*.cover
+*.pytest_cache/
+nosetests.xml
+coverage.xml
+
+# Tooling
+mypy_cache/
+tox/
+.sass-cache/
+coverage/
+htmlcov/
+
+# Dependencies
+Pipfile.lock
