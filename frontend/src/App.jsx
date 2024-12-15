@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
-import { Upload, ChevronRight, AlertCircle, ImageIcon, CircleCheckIcon, CrossIcon, BanIcon ,Circle } from 'lucide-react';
+import { Upload, ChevronRight, AlertCircle, ImageIcon, CircleCheckIcon, CrossIcon, BanIcon, Circle } from 'lucide-react';
 
 export default function App() {
   const [file, setFile] = useState(null);
@@ -63,7 +63,7 @@ export default function App() {
       }
       setResult(null); // Clear result if the request fails
     } finally {
-      setTimeout(()=>{
+      setTimeout(() => {
         setLoading(false);
 
       }, 3000)
@@ -73,32 +73,33 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-indigo-200 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-      <h1 className="text-4xl font-extrabold text-center text-gray-900 mb-8">Lumbar Disc Herniation Detection</h1>
+        <h1 className="text-4xl font-extrabold text-center text-gray-900 mb-8">Lumbar Disc Herniation Detection</h1>
 
-      {/* Heading */}
+        <div
+          className="bg-white shadow-2xl rounded-3xl overflow-hidden"
+        >
+          <div className="p-8">
+            {/* <input {...getInputProps()} /> */}
+            <div className="border-2 border-dashed border-gray-300 rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 hover:border-blue-500 hover:bg-blue-50"
+              {...getRootProps()} >
+              {/* <img src="/logo.png" alt="Logo" className="w-16 h-16 mb-4" /> */}
+              <Upload className="mx-auto h-16 w-16 text-gray-400" />
+              <p className="mt-4 text-lg text-gray-600">Drag and drop your MRI image here, or click to select a file</p>
+              <input {...getInputProps()} className="hidden" accept=".jpg, .png, .dcm"/>
+              <button
+              className="mt-6 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              onClick={(event) => {
+                event.stopPropagation(); // Prevent opening the file picker
+                document.querySelector('input[type="file"]').click();
+              }}
+            >
+              Select File
+            </button>
 
-      {/* File Upload Box */}
-      <div
-        className="bg-white shadow-2xl rounded-3xl overflow-hidden"
-      >
-        <div className="p-8">
-        <input {...getInputProps()} />
-        <div className="border-2 border-dashed border-gray-300 rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 hover:border-blue-500 hover:bg-blue-50" 
-        {...getRootProps()} >
-          {/* <img src="/logo.png" alt="Logo" className="w-16 h-16 mb-4" /> */}
-          <Upload className="mx-auto h-16 w-16 text-gray-400" />
-          <p className="mt-4 text-lg text-gray-600">Drag and drop your MRI image here, or click to select a file</p>
-          <button
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600"
-            onClick={() => document.querySelector('input[type="file"]').click()}
-          >
-            Select File
-          </button>
-        </div>
 
-        {file && <p className="mt-4 text-sm text-gray-600 text-center">Selected file: {file.name}</p>}
+            {file && <p className="mt-4 text-sm text-gray-600 text-center">Selected file: {file.name}</p>}
 
-      {/* Analyze Button
+            {/* Analyze Button
       <button
         className={`mt-8 w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 ${
           !file ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
@@ -109,19 +110,21 @@ export default function App() {
         Analyze MRI
       </button> */}
 
-      <button
-              onClick={analyzeMRI}
+            <button
+              onClick={(event) => {
+                event.stopPropagation();
+                analyzeMRI();
+              }}
               disabled={!file || loading}
               className="mt-8 w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Analyzing...' : 'Analyze MRI'}
               <ChevronRight className="ml-2 h-5 w-5" />
             </button>
-            </div>
-      </div>
+          </div>
 
-      {/* Loading Bar */}
-      {/* {loading && (
+          {/* Loading Bar */}
+          {/* {loading && (
         <div className="w-full max-w-md mt-8 p-4 bg-white shadow-lg rounded-lg">
           <div className="flex justify-between mb-2">
             <div className="px-4 py-1 bg-blue-200 rounded-md">Loading</div>
@@ -137,7 +140,7 @@ export default function App() {
       )}
       </div> */}
 
-      {loading && (
+          {loading && (
             <div className="px-8 pt-8 pb-8">
               <div className="relative pt-1">
                 <div className="flex mb-2 items-center justify-between">
@@ -162,15 +165,16 @@ export default function App() {
             </div>
           )}
         </div>
+      </div>
 
 
       {/* Result Section */}
       {result && !loading && (
         <div className="mt-12 bg-white shadow-2xl rounded-3xl overflow-hidden">
           <div className="p-8">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6">Classification Result</h3>
-          <div className="flex items-center space-x-4">
-            {/* <div
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Classification Result</h3>
+            <div className="flex items-center space-x-4">
+              {/* <div
               className={`w-6 h-6 rounded-full ${
                 result.class === "Herniated" ? "bg-red-500" : "bg-green-500"
               }`}
@@ -179,29 +183,29 @@ export default function App() {
               {result.class} - {result.confidence}
             </p> */}
 
-            {result.class === 'Herniated' ? (
-                  <AlertCircle className="h-12 w-12 text-red-500" />
-                ) : (
-                  <CircleCheckIcon className="h-12 w-12 text-green-500" />
-                )}
+              {result.class === 'Herniated' ? (
+                <AlertCircle className="h-12 w-12 text-red-500" />
+              ) : (
+                <CircleCheckIcon className="h-12 w-12 text-green-500" />
+              )}
 
-<div>
-                  <p className="text-3xl font-bold text-gray-900">
-                    {result.class}
-                  </p>
-                  <p className="text-xl text-gray-600">
-                    {result.class} with {result.confidence}% confidence
-                  </p>
-                </div>
+              <div>
+                <p className="text-3xl font-bold text-gray-900">
+                  {result.class}
+                </p>
+                <p className="text-xl text-gray-600">
+                  {result.class} with {result.confidence}% confidence
+                </p>
+              </div>
 
-            
+
+            </div>
+            <p className="mt-4 text-gray-600">
+              {result.class === "Herniated"
+                ? "This result suggests a herniated lumbar disc. Please consult with a healthcare professional for a comprehensive evaluation and diagnosis."
+                : "The MRI suggests no signs of lumbar disc herniation."}
+            </p>
           </div>
-          <p className="mt-4 text-gray-600">
-            {result.class === "Herniated"
-              ? "This result suggests a herniated lumbar disc. Please consult with a healthcare professional for a comprehensive evaluation and diagnosis."
-              : "The MRI suggests no signs of lumbar disc herniation."}
-          </p>
-        </div>
         </div>
       )}
 
@@ -210,13 +214,14 @@ export default function App() {
         <div className="mt-12 bg-white shadow-2xl rounded-3xl overflow-hidden">
           <div className="p-8">
             <div className="flex items-center space-x-4">
-            <BanIcon className="h-12 w-12 text-red-500" />
-          <h3 className="text-3xl font-bold text-red-600">Error</h3>
+              <BanIcon className="h-12 w-12 text-red-500" />
+              <h3 className="text-3xl font-bold text-red-600">Error</h3>
             </div>
-          <p className="mt-4 text-gray-600">{error}</p>
-        </div>
+            <p className="mt-4 text-gray-600">{error}</p>
+          </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
