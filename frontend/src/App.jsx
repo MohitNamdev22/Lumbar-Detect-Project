@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
-import { Upload, ChevronRight, AlertCircle, ImageIcon, CircleCheckIcon, Circle } from 'lucide-react';
+import { Upload, ChevronRight, AlertCircle, ImageIcon, CircleCheckIcon, CrossIcon, BanIcon ,Circle } from 'lucide-react';
 
 export default function App() {
   const [file, setFile] = useState(null);
@@ -72,7 +72,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 to-indigo-200 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl">
+      <div className="max-w-4xl mx-auto">
       <h1 className="text-4xl font-extrabold text-center text-gray-900 mb-8">Lumbar Disc Herniation Detection</h1>
 
       {/* Heading */}
@@ -207,9 +207,14 @@ export default function App() {
 
       {/* Error Section */}
       {error && !loading && (
-        <div className="w-11/12 md:w-1/2 mt-12 p-6 bg-white rounded-lg shadow-lg">
-          <h3 className="text-xl font-semibold text-red-600">Error</h3>
+        <div className="mt-12 bg-white shadow-2xl rounded-3xl overflow-hidden">
+          <div className="p-8">
+            <div className="flex items-center space-x-4">
+            <BanIcon className="h-12 w-12 text-red-500" />
+          <h3 className="text-3xl font-bold text-red-600">Error</h3>
+            </div>
           <p className="mt-4 text-gray-600">{error}</p>
+        </div>
         </div>
       )}
     </div>
