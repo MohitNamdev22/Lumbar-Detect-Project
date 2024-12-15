@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
+import { Upload, ChevronRight, AlertCircle, ImageIcon, CircleCheckIcon, Circle } from 'lucide-react';
 
 export default function App() {
   const [file, setFile] = useState(null);
@@ -62,24 +63,31 @@ export default function App() {
       }
       setResult(null); // Clear result if the request fails
     } finally {
-      setLoading(false);
+      setTimeout(()=>{
+        setLoading(false);
+
+      }, 3000)
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#c1cdf0] flex flex-col items-center py-12">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-indigo-200 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl">
+      <h1 className="text-4xl font-extrabold text-center text-gray-900 mb-8">Lumbar Disc Herniation Detection</h1>
+
       {/* Heading */}
-      <h1 className="text-4xl font-bold mb-8 text-center">Lumbar Disc Herniation Detection</h1>
 
       {/* File Upload Box */}
       <div
-        className="w-11/12 md:w-1/2 p-6 border-2 border-dashed rounded-lg shadow-lg"
-        {...getRootProps()}
+        className="bg-white shadow-2xl rounded-3xl overflow-hidden"
       >
+        <div className="p-8">
         <input {...getInputProps()} />
-        <div className="flex flex-col items-center justify-center">
-          <img src="/logo.png" alt="Logo" className="w-16 h-16 mb-4" />
-          <p className="text-lg text-gray-700">Drag and drop your MRI image here, or click to select a file</p>
+        <div className="border-2 border-dashed border-gray-300 rounded-2xl p-12 text-center cursor-pointer transition-all duration-300 hover:border-blue-500 hover:bg-blue-50" 
+        {...getRootProps()} >
+          {/* <img src="/logo.png" alt="Logo" className="w-16 h-16 mb-4" /> */}
+          <Upload className="mx-auto h-16 w-16 text-gray-400" />
+          <p className="mt-4 text-lg text-gray-600">Drag and drop your MRI image here, or click to select a file</p>
           <button
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600"
             onClick={() => document.querySelector('input[type="file"]').click()}
@@ -87,23 +95,33 @@ export default function App() {
             Select File
           </button>
         </div>
-      </div>
 
-      {/* Analyze Button */}
+        {file && <p className="mt-4 text-sm text-gray-600 text-center">Selected file: {file.name}</p>}
+
+      {/* Analyze Button
       <button
-        className={`mt-6 px-6 py-3 bg-blue-500 text-white rounded-full shadow-lg ${
+        className={`mt-8 w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 ${
           !file ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
         }`}
         onClick={analyzeMRI}
         disabled={!file}
       >
         Analyze MRI
-      </button>
+      </button> */}
 
-      {file && <p className="mt-4 text-gray-600">Selected file: {file.name}</p>}
+      <button
+              onClick={analyzeMRI}
+              disabled={!file || loading}
+              className="mt-8 w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Analyzing...' : 'Analyze MRI'}
+              <ChevronRight className="ml-2 h-5 w-5" />
+            </button>
+            </div>
+      </div>
 
       {/* Loading Bar */}
-      {loading && (
+      {/* {loading && (
         <div className="w-full max-w-md mt-8 p-4 bg-white shadow-lg rounded-lg">
           <div className="flex justify-between mb-2">
             <div className="px-4 py-1 bg-blue-200 rounded-md">Loading</div>
@@ -117,26 +135,73 @@ export default function App() {
           </div>
         </div>
       )}
+      </div> */}
+
+      {loading && (
+            <div className="px-8 pt-8 pb-8">
+              <div className="relative pt-1">
+                <div className="flex mb-2 items-center justify-between">
+                  <div>
+                    <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-indigo-600 bg-indigo-200">
+                      Processing
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xs font-semibold inline-block text-indigo-600">
+                      {loadingProgress}%
+                    </span>
+                  </div>
+                </div>
+                <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-indigo-200">
+                  <div
+                    style={{ width: `${loadingProgress}%` }}
+                    className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-indigo-500 transition-all duration-300 ease-in-out"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
 
       {/* Result Section */}
       {result && !loading && (
-        <div className="w-11/12 md:w-1/2 mt-12 p-6 bg-white rounded-lg shadow-lg">
-          <h3 className="text-xl font-semibold">Classification Result</h3>
-          <div className="flex items-center mt-4">
-            <div
+        <div className="mt-12 bg-white shadow-2xl rounded-3xl overflow-hidden">
+          <div className="p-8">
+          <h3 className="text-2xl font-bold text-gray-900 mb-6">Classification Result</h3>
+          <div className="flex items-center space-x-4">
+            {/* <div
               className={`w-6 h-6 rounded-full ${
                 result.class === "Herniated" ? "bg-red-500" : "bg-green-500"
               }`}
             />
             <p className="ml-4 text-lg">
               {result.class} - {result.confidence}
-            </p>
+            </p> */}
+
+            {result.class === 'Herniated' ? (
+                  <AlertCircle className="h-12 w-12 text-red-500" />
+                ) : (
+                  <CircleCheckIcon className="h-12 w-12 text-green-500" />
+                )}
+
+<div>
+                  <p className="text-3xl font-bold text-gray-900">
+                    {result.class}
+                  </p>
+                  <p className="text-xl text-gray-600">
+                    {result.class} with {result.confidence}% confidence
+                  </p>
+                </div>
+
+            
           </div>
           <p className="mt-4 text-gray-600">
             {result.class === "Herniated"
               ? "This result suggests a herniated lumbar disc. Please consult with a healthcare professional for a comprehensive evaluation and diagnosis."
               : "The MRI suggests no signs of lumbar disc herniation."}
           </p>
+        </div>
         </div>
       )}
 
