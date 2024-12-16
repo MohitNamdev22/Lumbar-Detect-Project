@@ -9,13 +9,15 @@ export default function App() {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [isAnalyzed, setIsAnalyzed] = useState(false);
 
   // Handle file selection
   const onDrop = (acceptedFiles) => {
-    const file = acceptedFiles[0];
-    setFile(file);
+    const selectedFile = acceptedFiles[0];
+    setFile(selectedFile);
     setResult(null); // Reset result when a new file is selected
     setError(null); // Reset error when a new file is selected
+    setIsAnalyzed(false);
   };
 
   // Use Dropzone for drag-and-drop
@@ -54,6 +56,7 @@ export default function App() {
 
       setResult(response.data);
       setError(null); // Clear error if the request succeeds
+      setIsAnalyzed(true);
     } catch (err) {
       if (err.response && err.response.status === 400) {
         // Handle the error response from the API
@@ -115,7 +118,7 @@ export default function App() {
                 event.stopPropagation();
                 analyzeMRI();
               }}
-              disabled={!file || loading}
+              disabled={!file || loading || isAnalyzed}
               className="mt-8 w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Analyzing...' : 'Analyze MRI'}
