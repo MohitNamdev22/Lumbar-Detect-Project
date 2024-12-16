@@ -197,7 +197,7 @@ export default function App() {
                   {result.class}
                 </p>
                 <p className="text-xl text-gray-600">
-                  {result.class} with {result.confidence}% confidence
+                  {result.class} with {result.confidence} confidence
                 </p>
               </div>
 
