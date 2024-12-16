@@ -53,3 +53,7 @@ htmlcov/
 
 # Dependencies
 Pipfile.lock
+
+#model
+/models
+/utils
